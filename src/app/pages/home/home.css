@@ -1,0 +1,90 @@
+/* container do dropdown */
+.status-select {
+    position: relative;
+    display: inline-block;
+    margin-left: 8px; /* afasta da task-name */
+}
+
+/* botão que mostra só a setinha */
+.select-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.select-toggle:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.select-toggle:active {
+    background: #f3f4f6;
+}
+
+/* setinha */
+.chevron {
+    font-size: 12px;
+    line-height: 1;
+}
+
+/* menu “estilo select” */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;       /* aparece logo abaixo do botão */
+    left: 0;         /* alinha na esquerda do botão */
+    min-width: 180px; /* largura mínima pro menu */
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+
+/* itens do menu */
+.dropdown-menu li {
+    margin-left: -40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.dropdown-menu li:hover {
+    background: #f3f4f6;
+}
+
+/* item “apagar” em destaque */
+.dropdown-menu li.danger {
+    color: #b91c1c;
+}
+
+.dropdown-menu li.danger:hover {
+    background: #fee2e2;
+}
+
+/* ajusta os ícones/emoji */
+.opt-icon {
+    width: 18px;
+    display: inline-flex;
+    justify-content: center;
+}
+
+/* alinhamento geral da linha da tarefa */
+.status-emoji {
+    margin-right: 6px;
+}
+
+.task-name {
+    margin-right: 4px;
+}

@@ -1,0 +1,84 @@
+<h2>Pastas e Tarefas</h2>
+
+<!-- Input para criar nova pasta -->
+<input
+  type="text"
+  placeholder="Digite o nome da pasta"
+  [(ngModel)]="newFolder"
+  name="newFolder"
+/>
+<button type="button" (click)="addFolder(newFolder)">Nova pasta</button>
+
+<ul>
+  <!-- Primeiro loop: pastas -->
+  <li *ngFor="let folder of tasks | keyvalue: originalOrder">
+    <!-- Botão para abrir/fechar a pasta -->
+    <button (click)="toggleFolder(folder.key)">
+      <strong>{{ folder.key }}</strong>
+    </button>
+    <button class="danger" (click)="deleteFolder(folder.key)">🗑️</button>
+
+    <!-- Só renderiza tarefas se a pasta estiver aberta -->
+    <ul *ngIf="openFolder === folder.key">
+      <!-- Segundo loop: tarefas da pasta -->
+      <li *ngFor="let task of folder.value | keyvalue: originalOrder">
+        <!-- Emoji/status atual -->
+        <span class="status-emoji">{{ getStatusEmoji(task.value.status) }}</span>
+
+        <!-- Nome da tarefa -->
+        <span class="task-name">{{ task.key }}</span>
+
+        <!-- Dropdown estilo select -->
+        <div class="dropdown status-select">
+          <button
+            type="button"
+            class="select-toggle"
+            (click)="toggleDropdown(folder.key, task.key)"
+            aria-haspopup="listbox"
+            [attr.aria-expanded]="openDropdown?.folder === folder.key && openDropdown?.task === task.key"
+            title="Alterar status"
+          >
+            <span class="chevron">▼</span>
+          </button>
+
+          <ul
+            *ngIf="openDropdown?.folder === folder.key && openDropdown?.task === task.key"
+            class="dropdown-menu"
+            role="listbox"
+          >
+            <li
+              *ngFor="let status of statuses"
+              role="option"
+              tabindex="0"
+              (click)="onStatusChange(folder.key, task.key, status.value)"
+            >
+              <span class="opt-icon">{{ status.icon }}</span>
+              <span class="opt-label">{{ status.label }}</span>
+            </li>
+
+            <li
+              class="danger"
+              role="option"
+              tabindex="0"
+              (click)="deleteTask(folder.key, task.key); openDropdown = null"
+            >
+              <span class="opt-icon">🗑️</span>
+              <span class="opt-label">Apagar</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <!-- Input para adicionar nova tarefa -->
+      <li>
+        <input
+          type="text"
+          placeholder="Nova tarefa"
+          [(ngModel)]="newTask"
+          name="newTask_{{ folder.key }}"
+        />
+        <button type="button" (click)="addTask(folder.key, newTask)">Adicionar</button>
+      </li>
+    </ul>
+  </li>
+</ul>
