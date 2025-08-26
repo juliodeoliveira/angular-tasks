@@ -37,11 +37,22 @@ export class Home implements OnInit {
   ];
 
   ngOnInit() {
+    // 🔹 Carrega as tasks
     const savedTasks = localStorage.getItem('tasks');
     if (savedTasks) {
       this.tasks = JSON.parse(savedTasks);
     } else {
       this.tasks = {};
+    }
+
+    // 🔹 Carrega a última pasta aberta
+    const savedFolder = localStorage.getItem('lastOpenFolder');
+    if (savedFolder && this.tasks[savedFolder]) {
+      this.openFolder = savedFolder;
+    } else {
+      // se não tiver nenhuma salva, abre a primeira pasta (se existir)
+      const firstFolder = Object.keys(this.tasks)[0];
+      this.openFolder = firstFolder || null;
     }
   }
 
@@ -69,6 +80,13 @@ export class Home implements OnInit {
 
   toggleFolder(folderName: string) {
     this.openFolder = this.openFolder === folderName ? null : folderName;
+
+    // 🔹 Sempre salva a última pasta aberta
+    if (this.openFolder) {
+      localStorage.setItem('lastOpenFolder', this.openFolder);
+    } else {
+      localStorage.removeItem('lastOpenFolder');
+    }
   }
 
   deleteFolder(folderName: string) {
@@ -78,7 +96,18 @@ export class Home implements OnInit {
 
     delete this.tasks[folderName];
     this.saveTasks();
-    if (this.openFolder === folderName) this.openFolder = null;
+
+    if (this.openFolder === folderName) {
+      this.openFolder = null;
+      localStorage.removeItem('lastOpenFolder');
+
+      // abre outra pasta se existir
+      const firstFolder = Object.keys(this.tasks)[0];
+      if (firstFolder) {
+        this.openFolder = firstFolder;
+        localStorage.setItem('lastOpenFolder', firstFolder);
+      }
+    }
   }
 
   addFolder(folderName?: string) {
@@ -97,6 +126,9 @@ export class Home implements OnInit {
     this.saveTasks();
     this.openFolder = folderName;
     this.newFolder = "";
+
+    // 🔹 Salva como última aberta
+    localStorage.setItem('lastOpenFolder', folderName);
   }
 
   addTask(folderName: string, taskName: string) {

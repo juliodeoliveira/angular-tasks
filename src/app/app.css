@@ -1,0 +1,14 @@
+ 
+@font-face {
+  font-family: "Pixelized";
+  src: url("/assets/fonts/PixelizedHandwritingRegular-8jz2.ttf") format("truetype");
+}
+
+* {
+    font-family: "Pixel", monospace;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}

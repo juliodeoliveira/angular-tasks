@@ -1,90 +1,228 @@
-/* container do dropdown */
-.status-select {
-    position: relative;
-    display: inline-block;
-    margin-left: 8px; /* afasta da task-name */
+@font-face {
+  font-family: "Pixelized";
+  src: url("/assets/fonts/cattos-handwriting.otf.woff2") format("truetype");
 }
 
-/* botão que mostra só a setinha */
+* {
+  margin: 0;
+  font-family: "Pixelized", monospace;
+  font-size: 110%;
+}
+
+/* container geral */
+.todo-container {
+  padding-top: 150px;
+  background: #fdfdfd;
+  min-height: 100vh;
+  width: 100vw;
+
+  /* TODO: Tomar cuidado, pq se eu for colocando tarefa atras de tarefa ele vai quebrar la em baixo pq repete a folha */
+  /* Posso colocar uma div com o pedaco de cima da folha, o pedaco em branco, aí o outro vai servir pra ficar repetindo com as linhas 
+    na hora de fazer essa folha o fim tem que ta do mesmo tamano de uma linha pra poder ficar melhor em loop
+  */
+  background: url("/assets/images/to-do-background.jpg") repeat-y top center;
+  background-size: 100% auto; /* largura 100%, altura proporcional */
+}
+
+/* abas */
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 0.5rem;
+  padding: 0.8rem 0;
+  border-bottom: 2px solid #ccc;
+}
+
+.tab {
+  flex: 0 0 auto;
+  padding: 0.5rem 1rem;
+  background: #d6c6a8;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  box-shadow: 3px 3px 8px #00000087;
+}
+
+.tab.active {
+  background: #c7ad7e;
+  font-weight: bold;
+}
+
+/* --- ÁREA FIXA DE TAREFAS COM FUNDO DE CADERNO --- */
+.tasks-area {
+  margin-top: 1rem;
+  height: auto; /* cresce conforme o conteúdo */
+  overflow-y: auto; /* ativa scroll vertical se passar da tela */
+  
+  box-sizing: border-box;
+  border-left: 2px solid #ccc;
+  border-right: 2px solid #ccc;
+}
+
+/* cada tarefa ocupa UMA linha do caderno */
+.tasks {
+
+  font-size: 1.5em;
+  line-height: 73px; /* ajusta até bater com a linha do caderno */
+
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+
+  
+}
+
+/* nome da tarefa e emoji */
+.status-emoji {
+    margin-left: 120px;
+    margin-right: 6px;
+}
+.task-name {
+  margin-right: 4px;
+  
+}
+
+span.opt-icon {
+  flex-shrink: 0;                 /* nunca diminui o ícone */
+  margin-right: 8px;              /* espaço entre ícone e texto */
+}
+
+span.opt-label {
+  white-space: normal;            /* permite quebrar linha */
+  word-wrap: break-word;          /* quebra palavras grandes */
+  overflow-wrap: anywhere;        /* força quebra em textos contínuos */
+  max-width: 200px;               /* controla até onde o texto vai */
+}
+
+
+/* input da tarefa nova */
+.add-task {
+  background-color: transparent;
+  border: 0;
+  outline: none;
+  font-size: 1.5em;
+  line-height: 48px; /* mesmo alinhamento das tarefas */
+  width: 80%;
+
+}
+
+.add-task-input {
+  margin-left: 150px;
+}
+
+/* --- DROPDOWN --- */
+.status-select {
+  position: relative;
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.add-folder {
+  margin-left: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+
+  box-shadow: 3px 3px 8px #00000087;
+  border: none;
+  border-radius: 5px;
+  background: #ebdec8;
+
+}
+
+.folder-name li {
+  list-style-position: inside;
+  text-align: center;
+}
+
+.folder-name > input {
+  background: transparent;
+}
+
+.folder-input {
+  background: transparent;
+  outline: none;
+  border: none;
+}
+
 .select-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 28px;
-    height: 28px;
-    padding: 0 6px;
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
-    border-radius: 6px;
-    cursor: pointer;
-    user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .select-toggle:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
+  background: #f9fafb;
+  border-color: #d1d5db;
 }
 
 .select-toggle:active {
-    background: #f3f4f6;
+  background: #f3f4f6;
 }
 
-/* setinha */
 .chevron {
-    font-size: 12px;
-    line-height: 1;
+  font-size: 12px;
+  line-height: 1;
 }
 
-/* menu “estilo select” */
+.option {
+  padding-left: 33px;
+}
+
 .dropdown-menu {
-    position: absolute;
-    top: 100%;       /* aparece logo abaixo do botão */
-    left: 0;         /* alinha na esquerda do botão */
-    min-width: 180px; /* largura mínima pro menu */
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    z-index: 1000;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 1000;
+
+  /* --- adições para limitar tamanho e rolar --- */
+  max-height: 50vh;   /* nunca passa do tamanho da tela */
+  overflow-y: auto;   /* ativa scroll quando necessário */
+  overflow-x: hidden; /* evita scroll lateral */
 }
 
 
-/* itens do menu */
 .dropdown-menu li {
-    margin-left: -40px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    cursor: pointer;
-    white-space: nowrap;
+  margin-left: -40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  font-size: 30px;
 }
 
 .dropdown-menu li:hover {
-    background: #f3f4f6;
+  background: #f3f4f6;
 }
 
-/* item “apagar” em destaque */
 .dropdown-menu li.danger {
-    color: #b91c1c;
+  color: #b91c1c;
 }
-
 .dropdown-menu li.danger:hover {
-    background: #fee2e2;
+  background: #fee2e2;
 }
 
-/* ajusta os ícones/emoji */
 .opt-icon {
-    width: 18px;
-    display: inline-flex;
-    justify-content: center;
-}
-
-/* alinhamento geral da linha da tarefa */
-.status-emoji {
-    margin-right: 6px;
-}
-
-.task-name {
-    margin-right: 4px;
+  width: 18px;
+  display: inline-flex;
+  justify-content: center;
 }
